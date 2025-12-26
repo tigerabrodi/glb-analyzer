@@ -1,15 +1,19 @@
-import { Suspense, useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Center } from '@react-three/drei';
-import type { ProblemGeometry, OverlayVisibility, CameraFrame } from '../lib/types';
-import { GLBModel } from './GLBModel';
-import { ProblemOverlays } from './ProblemOverlays';
+import { Center, Environment, OrbitControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { Suspense, useMemo } from 'react'
+import type {
+  CameraFrame,
+  OverlayVisibility,
+  ProblemGeometry,
+} from '../lib/types'
+import { GLBModel } from './GLBModel'
+import { ProblemOverlays } from './ProblemOverlays'
 
 interface ModelViewerProps {
-  glbUrl: string | null;
-  problemGeometry: ProblemGeometry | null;
-  overlayVisibility: OverlayVisibility;
-  cameraFrame?: CameraFrame;
+  glbUrl: string | null
+  problemGeometry: ProblemGeometry | null
+  overlayVisibility: OverlayVisibility
+  cameraFrame?: CameraFrame
 }
 
 /**
@@ -30,7 +34,7 @@ export function ModelViewer({
         near: cameraFrame.near,
         far: cameraFrame.far,
         fov: 50,
-      };
+      }
     }
     // Default camera for when no frame is provided
     return {
@@ -38,15 +42,15 @@ export function ModelViewer({
       near: 0.01,
       far: 1000,
       fov: 50,
-    };
-  }, [cameraFrame]);
+    }
+  }, [cameraFrame])
 
   const controlsTarget = useMemo(() => {
     if (cameraFrame) {
-      return cameraFrame.target as [number, number, number];
+      return cameraFrame.target as [number, number, number]
     }
-    return [0, 0, 0] as [number, number, number];
-  }, [cameraFrame]);
+    return [0, 0, 0] as [number, number, number]
+  }, [cameraFrame])
 
   return (
     <div className="w-full h-full relative bg-neutral-900">
@@ -94,7 +98,7 @@ export function ModelViewer({
         )}
       </Canvas>
     </div>
-  );
+  )
 }
 
 /**
@@ -106,17 +110,5 @@ function LoadingIndicator() {
       <boxGeometry args={[0.2, 0.2, 0.2]} />
       <meshStandardMaterial color="#666666" wireframe />
     </mesh>
-  );
+  )
 }
-
-/**
- * Default overlay visibility settings.
- */
-export const defaultOverlayVisibility: OverlayVisibility = {
-  wireframe: false,
-  boundaryEdges: true,
-  nonManifoldEdges: true,
-  pinchPoints: true,
-  selfIntersections: true,
-  tJunctions: true,
-};

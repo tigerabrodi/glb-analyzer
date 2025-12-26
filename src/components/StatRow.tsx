@@ -1,20 +1,20 @@
-import { Info } from 'lucide-react';
+import { Info } from 'lucide-react'
 
 export interface StatRowProps {
-  label: string;
-  value: string | number;
-  severity?: 'good' | 'warning' | 'error';
-  tooltip?: string;
+  label: string
+  value: string | number
+  severity?: 'good' | 'warning' | 'error'
+  tooltip?: string
 }
 
 const severityColors = {
   good: 'text-emerald-400',
   warning: 'text-amber-400',
   error: 'text-red-400',
-} as const;
+} as const
 
 export function StatRow({ label, value, severity, tooltip }: StatRowProps) {
-  const valueColor = severity ? severityColors[severity] : 'text-zinc-100';
+  const valueColor = severity ? severityColors[severity] : 'text-zinc-100'
 
   return (
     <div className="flex items-center justify-between py-2 px-3 hover:bg-zinc-800/50 rounded-md transition-colors">
@@ -34,5 +34,5 @@ export function StatRow({ label, value, severity, tooltip }: StatRowProps) {
         {typeof value === 'number' ? value.toLocaleString() : value}
       </span>
     </div>
-  );
+  )
 }

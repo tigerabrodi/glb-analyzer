@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useGlbAnalyzer } from './hooks';
+import { useState } from 'react'
+import { useGlbAnalyzer } from './hooks'
 import {
   DropZone,
   AnalysisPanel,
@@ -7,37 +7,50 @@ import {
   ProgressIndicator,
   ModelViewer,
   defaultOverlayVisibility,
-} from './components';
-import type { OverlayVisibility } from './lib/types';
+} from './components'
+import type { OverlayVisibility } from './lib/types'
 
 function App() {
-  const { state, analyzeFile, analyzeUrl, reset, glbObjectUrl } = useGlbAnalyzer();
-  const [overlayVisibility, setOverlayVisibility] = useState<OverlayVisibility>(defaultOverlayVisibility);
+  const { state, analyzeFile, analyzeUrl, reset, glbObjectUrl } =
+    useGlbAnalyzer()
+  const [overlayVisibility, setOverlayVisibility] = useState<OverlayVisibility>(
+    defaultOverlayVisibility
+  )
 
-  const isLoading = state.status === 'loading' || state.status === 'parsing' ||
-                    state.status === 'analyzing' || state.status === 'extracting';
-  const hasResult = state.status === 'done' && state.result !== null;
-  const progressStage = ['parsing', 'analyzing', 'extracting'].includes(state.status)
-    ? state.status as 'parsing' | 'analyzing' | 'extracting'
-    : null;
+  const isLoading =
+    state.status === 'loading' ||
+    state.status === 'parsing' ||
+    state.status === 'analyzing' ||
+    state.status === 'extracting'
+  const hasResult = state.status === 'done' && state.result !== null
+  const progressStage = ['parsing', 'analyzing', 'extracting'].includes(
+    state.status
+  )
+    ? (state.status as 'parsing' | 'analyzing' | 'extracting')
+    : null
 
   // Compute overlay counts from problem geometry
-  const overlayCounts = state.result?.problemGeometry ? {
-    boundaryEdges: state.result.problemGeometry.boundaryEdges.length / 6,
-    nonManifoldEdges: state.result.problemGeometry.nonManifoldEdges.length / 6,
-    nonManifoldVertices: state.result.problemGeometry.nonManifoldVertices.length / 3,
-    selfIntersections: state.result.problemGeometry.selfIntersectionCentroids.length / 3,
-    tJunctions: state.result.problemGeometry.tJunctionVertices.length / 3,
-  } : {
-    boundaryEdges: 0,
-    nonManifoldEdges: 0,
-    nonManifoldVertices: 0,
-    selfIntersections: 0,
-    tJunctions: 0,
-  };
+  const overlayCounts = state.result?.problemGeometry
+    ? {
+        boundaryEdges: state.result.problemGeometry.boundaryEdges.length / 6,
+        nonManifoldEdges:
+          state.result.problemGeometry.nonManifoldEdges.length / 6,
+        nonManifoldVertices:
+          state.result.problemGeometry.nonManifoldVertices.length / 3,
+        selfIntersections:
+          state.result.problemGeometry.selfIntersectionCentroids.length / 3,
+        tJunctions: state.result.problemGeometry.tJunctionVertices.length / 3,
+      }
+    : {
+        boundaryEdges: 0,
+        nonManifoldEdges: 0,
+        nonManifoldVertices: 0,
+        selfIntersections: 0,
+        tJunctions: 0,
+      }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-neutral-900 text-zinc-100">
       {/* Header */}
       <header className="border-b border-zinc-800 px-6 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -127,7 +140,7 @@ function App() {
         </div>
       </footer>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

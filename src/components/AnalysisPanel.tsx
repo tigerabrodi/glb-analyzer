@@ -1,22 +1,28 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronRight, Download, Clock, HardDrive } from 'lucide-react';
-import type { MeshDiagnostics } from '../lib/types';
-import { StatRow } from './StatRow';
+import {
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Download,
+  HardDrive,
+} from 'lucide-react'
+import { useState } from 'react'
+import type { MeshDiagnostics } from '../lib/types'
+import { StatRow } from './StatRow'
 
 export interface AnalysisPanelProps {
-  diagnostics: MeshDiagnostics;
-  fileSizeKb: number;
-  durationMs: number;
+  diagnostics: MeshDiagnostics
+  fileSizeKb: number
+  durationMs: number
 }
 
 interface SectionProps {
-  title: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
+  title: string
+  defaultOpen?: boolean
+  children: React.ReactNode
 }
 
 function Section({ title, defaultOpen = true, children }: SectionProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
     <div className="border border-zinc-800 rounded-lg overflow-hidden">
@@ -33,42 +39,62 @@ function Section({ title, defaultOpen = true, children }: SectionProps) {
       </button>
       {isOpen && <div className="p-2">{children}</div>}
     </div>
-  );
+  )
 }
 
-function getQualityScore(diagnostics: MeshDiagnostics): { score: number; label: string; color: string } {
-  let score = 100;
+function getQualityScore(diagnostics: MeshDiagnostics): {
+  score: number
+  label: string
+  color: string
+} {
+  let score = 100
 
   // Deduct for topology issues
-  if (!diagnostics.isWatertight) score -= 15;
-  if (!diagnostics.isManifold) score -= 20;
-  if (diagnostics.hasNonManifoldVertices) score -= 10;
-  if (!diagnostics.hasConsistentWinding && !diagnostics.windingCheckSkipped) score -= 10;
+  if (!diagnostics.isWatertight) score -= 15
+  if (!diagnostics.isManifold) score -= 20
+  if (diagnostics.hasNonManifoldVertices) score -= 10
+  if (!diagnostics.hasConsistentWinding && !diagnostics.windingCheckSkipped)
+    score -= 10
 
   // Deduct for quality issues
-  if (diagnostics.degenerateTriangleCount > 0) score -= Math.min(15, diagnostics.degenerateTriangleCount);
-  if (diagnostics.selfIntersectionCount > 0) score -= Math.min(20, diagnostics.selfIntersectionCount * 2);
-  if (diagnostics.tJunctionCount > 0) score -= Math.min(10, diagnostics.tJunctionCount);
-  if (diagnostics.duplicateVertexCount > 0) score -= Math.min(5, Math.floor(diagnostics.duplicateVertexCount / 100));
-  if (diagnostics.tinyTriangleCount > 0) score -= Math.min(5, Math.floor(diagnostics.tinyTriangleCount / 10));
-  if (diagnostics.needleTriangleCount > 0) score -= Math.min(5, Math.floor(diagnostics.needleTriangleCount / 10));
+  if (diagnostics.degenerateTriangleCount > 0)
+    score -= Math.min(15, diagnostics.degenerateTriangleCount)
+  if (diagnostics.selfIntersectionCount > 0)
+    score -= Math.min(20, diagnostics.selfIntersectionCount * 2)
+  if (diagnostics.tJunctionCount > 0)
+    score -= Math.min(10, diagnostics.tJunctionCount)
+  if (diagnostics.duplicateVertexCount > 0)
+    score -= Math.min(5, Math.floor(diagnostics.duplicateVertexCount / 100))
+  if (diagnostics.tinyTriangleCount > 0)
+    score -= Math.min(5, Math.floor(diagnostics.tinyTriangleCount / 10))
+  if (diagnostics.needleTriangleCount > 0)
+    score -= Math.min(5, Math.floor(diagnostics.needleTriangleCount / 10))
 
-  score = Math.max(0, Math.min(100, score));
+  score = Math.max(0, Math.min(100, score))
 
-  if (score >= 90) return { score, label: 'Excellent', color: 'text-emerald-400' };
-  if (score >= 70) return { score, label: 'Good', color: 'text-blue-400' };
-  if (score >= 50) return { score, label: 'Fair', color: 'text-amber-400' };
-  return { score, label: 'Poor', color: 'text-red-400' };
+  if (score >= 90)
+    return { score, label: 'Excellent', color: 'text-emerald-400' }
+  if (score >= 70) return { score, label: 'Good', color: 'text-blue-400' }
+  if (score >= 50) return { score, label: 'Fair', color: 'text-amber-400' }
+  return { score, label: 'Poor', color: 'text-red-400' }
 }
 
-function getSeverity(value: number, warningThreshold: number = 1, errorThreshold: number = 10): 'good' | 'warning' | 'error' {
-  if (value >= errorThreshold) return 'error';
-  if (value >= warningThreshold) return 'warning';
-  return 'good';
+function getSeverity(
+  value: number,
+  warningThreshold: number = 1,
+  errorThreshold: number = 10
+): 'good' | 'warning' | 'error' {
+  if (value >= errorThreshold) return 'error'
+  if (value >= warningThreshold) return 'warning'
+  return 'good'
 }
 
-export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisPanelProps) {
-  const quality = getQualityScore(diagnostics);
+export function AnalysisPanel({
+  diagnostics,
+  fileSizeKb,
+  durationMs,
+}: AnalysisPanelProps) {
+  const quality = getQualityScore(diagnostics)
 
   const handleExport = () => {
     // Placeholder for export functionality
@@ -77,15 +103,17 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
       fileSizeKb,
       durationMs,
       exportedAt: new Date().toISOString(),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'mesh-analysis.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'mesh-analysis.json'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="w-full max-w-md bg-zinc-900/95 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden shadow-2xl">
@@ -128,11 +156,15 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-lg font-bold ${quality.color}`}>{quality.score}</span>
+              <span className={`text-lg font-bold ${quality.color}`}>
+                {quality.score}
+              </span>
             </div>
           </div>
           <div>
-            <p className={`text-xl font-semibold ${quality.color}`}>{quality.label}</p>
+            <p className={`text-xl font-semibold ${quality.color}`}>
+              {quality.label}
+            </p>
             <p className="text-zinc-500 text-sm">Quality Score</p>
           </div>
         </div>
@@ -157,7 +189,10 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
           <StatRow label="Vertices" value={diagnostics.vertexCount} />
           <StatRow label="Triangles" value={diagnostics.triangleCount} />
           <StatRow label="Edges" value={diagnostics.edgeCount} />
-          <StatRow label="Connected Components" value={diagnostics.connectedComponents} />
+          <StatRow
+            label="Connected Components"
+            value={diagnostics.connectedComponents}
+          />
           <StatRow
             label="Euler Characteristic"
             value={diagnostics.eulerCharacteristic}
@@ -181,8 +216,20 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
           />
           <StatRow
             label="Consistent Winding"
-            value={diagnostics.windingCheckSkipped ? 'Skipped' : diagnostics.hasConsistentWinding ? 'Yes' : 'No'}
-            severity={diagnostics.windingCheckSkipped ? undefined : diagnostics.hasConsistentWinding ? 'good' : 'warning'}
+            value={
+              diagnostics.windingCheckSkipped
+                ? 'Skipped'
+                : diagnostics.hasConsistentWinding
+                  ? 'Yes'
+                  : 'No'
+            }
+            severity={
+              diagnostics.windingCheckSkipped
+                ? undefined
+                : diagnostics.hasConsistentWinding
+                  ? 'good'
+                  : 'warning'
+            }
             tooltip="Face normals point consistently outward"
           />
           <StatRow
@@ -279,7 +326,11 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
             <>
               <StatRow
                 label="Bounding Box Size"
-                value={`${diagnostics.boundingBox.size.x.toFixed(2)} x ${diagnostics.boundingBox.size.y.toFixed(2)} x ${diagnostics.boundingBox.size.z.toFixed(2)}`}
+                value={`${diagnostics.boundingBox.size.x.toFixed(
+                  2
+                )} x ${diagnostics.boundingBox.size.y.toFixed(
+                  2
+                )} x ${diagnostics.boundingBox.size.z.toFixed(2)}`}
               />
               <StatRow
                 label="Diagonal"
@@ -290,5 +341,5 @@ export function AnalysisPanel({ diagnostics, fileSizeKb, durationMs }: AnalysisP
         </Section>
       </div>
     </div>
-  );
+  )
 }

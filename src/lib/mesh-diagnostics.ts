@@ -44,8 +44,8 @@ function numericDirectedEdgeKey(from: number, to: number): number {
  * rather than a single connected disk.
  */
 function detectNonManifoldVertices(
-  indices: Uint16Array | Uint32Array | number[],
-  _vertexCount: number
+  indices: Uint16Array | Uint32Array | number[]
+  // _vertexCount: number
 ): number {
   // Build vertex -> triangles adjacency
   const vertexToTriangles = new Map<number, number[]>()
@@ -1715,7 +1715,7 @@ export function computeMeshDiagnostics(
   const eulerCharacteristic = usedVertices.size - edgeCount + triangleCount
 
   // Non-manifold vertices
-  const nonManifoldVertexCount = detectNonManifoldVertices(indices, vertexCount)
+  const nonManifoldVertexCount = detectNonManifoldVertices(indices)
 
   // Winding consistency
   const windingResult = detectWindingConsistency(indices)

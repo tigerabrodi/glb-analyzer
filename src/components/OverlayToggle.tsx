@@ -1,26 +1,33 @@
-import { Grid3X3, GitBranch, CircleDot, Layers, Triangle, Waypoints } from 'lucide-react';
-import type { OverlayVisibility } from '../lib/types';
+import {
+  CircleDot,
+  GitBranch,
+  Grid3X3,
+  Layers,
+  Triangle,
+  Waypoints,
+} from 'lucide-react'
+import type { OverlayVisibility } from '../lib/types'
 
 export interface OverlayToggleProps {
-  visibility: OverlayVisibility;
-  onChange: (visibility: OverlayVisibility) => void;
+  visibility: OverlayVisibility
+  onChange: (visibility: OverlayVisibility) => void
   counts: {
-    boundaryEdges: number;
-    nonManifoldEdges: number;
-    nonManifoldVertices: number;
-    selfIntersections: number;
-    tJunctions: number;
-  };
+    boundaryEdges: number
+    nonManifoldEdges: number
+    nonManifoldVertices: number
+    selfIntersections: number
+    tJunctions: number
+  }
 }
 
 interface ToggleButtonProps {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-  count: number;
-  color: string;
-  activeColor: string;
+  active: boolean
+  onClick: () => void
+  icon: React.ReactNode
+  label: string
+  count: number
+  color: string
+  activeColor: string
 }
 
 function ToggleButton({
@@ -38,9 +45,10 @@ function ToggleButton({
       className={`
         flex items-center gap-2 px-3 py-2 rounded-lg
         transition-all duration-200
-        ${active
-          ? `${activeColor} ring-1 ring-current/30`
-          : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300'
+        ${
+          active
+            ? `${activeColor} ring-1 ring-current/30`
+            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300'
         }
         ${count === 0 ? 'opacity-50' : ''}
       `}
@@ -48,20 +56,26 @@ function ToggleButton({
     >
       <span className={active ? color : ''}>{icon}</span>
       <span className="text-sm font-medium hidden lg:inline">{label}</span>
-      <span className={`
+      <span
+        className={`
         text-xs px-1.5 py-0.5 rounded-full
         ${active ? 'bg-white/20' : 'bg-zinc-700'}
-      `}>
+      `}
+      >
         {count.toLocaleString()}
       </span>
     </button>
-  );
+  )
 }
 
-export function OverlayToggle({ visibility, onChange, counts }: OverlayToggleProps) {
+export function OverlayToggle({
+  visibility,
+  onChange,
+  counts,
+}: OverlayToggleProps) {
   const toggle = (key: keyof OverlayVisibility) => {
-    onChange({ ...visibility, [key]: !visibility[key] });
-  };
+    onChange({ ...visibility, [key]: !visibility[key] })
+  }
 
   return (
     <div className="flex flex-wrap gap-2 p-3 bg-zinc-900/80 backdrop-blur-sm rounded-xl border border-zinc-800">
@@ -127,5 +141,5 @@ export function OverlayToggle({ visibility, onChange, counts }: OverlayTogglePro
         activeColor="bg-cyan-500/20 text-cyan-400"
       />
     </div>
-  );
+  )
 }

@@ -1,1 +1,1 @@
-export { useGlbAnalyzer } from './useGlbAnalyzer';
+export { useGlbAnalyzer } from './useGlbAnalyzer'

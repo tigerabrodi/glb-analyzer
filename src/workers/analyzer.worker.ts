@@ -64,8 +64,7 @@ function postResult(id: number, result: AnalysisResult): void {
  */
 async function handleAnalyze(
   id: number,
-  arrayBuffer: ArrayBuffer,
-  _fileName: string
+  arrayBuffer: ArrayBuffer
 ): Promise<void> {
   const startTime = performance.now()
 
@@ -152,7 +151,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const { id, type, payload } = event.data
 
   if (type === 'analyze') {
-    await handleAnalyze(id, payload.arrayBuffer, payload.fileName)
+    await handleAnalyze(id, payload.arrayBuffer)
   }
 }
 

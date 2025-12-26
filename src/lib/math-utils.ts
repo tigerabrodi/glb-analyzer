@@ -1,4 +1,4 @@
-import type { Vec3, BoundingBox } from './types';
+import type { BoundingBox, Vec3 } from './types'
 
 /**
  * Compute bounding box from positions array.
@@ -11,40 +11,40 @@ export function computeBoundingBox(positions: Float32Array): BoundingBox {
       max: { x: 0, y: 0, z: 0 },
       size: { x: 0, y: 0, z: 0 },
       diagonal: 0,
-    };
+    }
   }
 
-  let minX = Infinity;
-  let minY = Infinity;
-  let minZ = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let maxZ = -Infinity;
+  let minX = Infinity
+  let minY = Infinity
+  let minZ = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+  let maxZ = -Infinity
 
   for (let i = 0; i < positions.length; i += 3) {
-    const x = positions[i];
-    const y = positions[i + 1];
-    const z = positions[i + 2];
+    const x = positions[i]
+    const y = positions[i + 1]
+    const z = positions[i + 2]
 
-    if (x < minX) minX = x;
-    if (y < minY) minY = y;
-    if (z < minZ) minZ = z;
-    if (x > maxX) maxX = x;
-    if (y > maxY) maxY = y;
-    if (z > maxZ) maxZ = z;
+    if (x < minX) minX = x
+    if (y < minY) minY = y
+    if (z < minZ) minZ = z
+    if (x > maxX) maxX = x
+    if (y > maxY) maxY = y
+    if (z > maxZ) maxZ = z
   }
 
-  const sizeX = maxX - minX;
-  const sizeY = maxY - minY;
-  const sizeZ = maxZ - minZ;
-  const diagonal = Math.sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ);
+  const sizeX = maxX - minX
+  const sizeY = maxY - minY
+  const sizeZ = maxZ - minZ
+  const diagonal = Math.sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ)
 
   return {
     min: { x: minX, y: minY, z: minZ },
     max: { x: maxX, y: maxY, z: maxZ },
     size: { x: sizeX, y: sizeY, z: sizeZ },
     diagonal,
-  };
+  }
 }
 
 /**
@@ -56,7 +56,7 @@ export function computeCenter(bbox: BoundingBox): Vec3 {
     (bbox.min.x + bbox.max.x) / 2,
     (bbox.min.y + bbox.max.y) / 2,
     (bbox.min.z + bbox.max.z) / 2,
-  ];
+  ]
 }
 
 /**
@@ -64,12 +64,12 @@ export function computeCenter(bbox: BoundingBox): Vec3 {
  * Returns the largest of width, height, or depth.
  */
 export function computeMaxDimension(bbox: BoundingBox): number {
-  return Math.max(bbox.size.x, bbox.size.y, bbox.size.z);
+  return Math.max(bbox.size.x, bbox.size.y, bbox.size.z)
 }
 
 /**
  * Clamp a value between min and max.
  */
 export function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
+  return Math.max(min, Math.min(max, value))
 }

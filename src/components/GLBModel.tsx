@@ -1,22 +1,35 @@
-import { useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei'
+import { useEffect } from 'react'
+import * as THREE from 'three'
 
 interface GLBModelProps {
-  url: string;
+  url: string
+  wireframe?: boolean
 }
 
 /**
  * Loads and displays a GLB model using drei's useGLTF hook.
  * Must be used inside a Canvas component.
  */
-export function GLBModel({ url }: GLBModelProps) {
-  const { scene } = useGLTF(url);
-  return <primitive object={scene} />;
-}
+export function GLBModel({ url, wireframe = false }: GLBModelProps) {
+  const { scene } = useGLTF(url)
 
-/**
- * Preload a GLB model for faster loading.
- * Call this outside of React components when you know a URL ahead of time.
- */
-export function preloadGLBModel(url: string) {
-  useGLTF.preload(url);
+  // Toggle wireframe mode on all materials
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        const materials = Array.isArray(child.material)
+          ? child.material
+          : [child.material]
+
+        materials.forEach((mat) => {
+          if (mat instanceof THREE.Material && 'wireframe' in mat) {
+            ;(mat as THREE.MeshStandardMaterial).wireframe = wireframe
+          }
+        })
+      }
+    })
+  }, [scene, wireframe])
+
+  return <primitive object={scene} />
 }

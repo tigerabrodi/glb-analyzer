@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import type { ProblemGeometry, OverlayVisibility } from '../lib/types';
+import { useMemo } from 'react'
+import type { OverlayVisibility, ProblemGeometry } from '../lib/types'
 
 interface ProblemOverlaysProps {
-  problemGeometry: ProblemGeometry;
-  visibility: OverlayVisibility;
+  problemGeometry: ProblemGeometry
+  visibility: OverlayVisibility
 }
 
 /**
@@ -11,7 +11,10 @@ interface ProblemOverlaysProps {
  * Shows boundary edges, non-manifold edges/vertices, self-intersections, and T-junctions.
  * Must be used inside a Canvas component.
  */
-export function ProblemOverlays({ problemGeometry, visibility }: ProblemOverlaysProps) {
+export function ProblemOverlays({
+  problemGeometry,
+  visibility,
+}: ProblemOverlaysProps) {
   // Memoize geometry arrays to avoid recreating on each render
   const {
     boundaryEdges,
@@ -19,14 +22,14 @@ export function ProblemOverlays({ problemGeometry, visibility }: ProblemOverlays
     nonManifoldVertices,
     selfIntersectionCentroids,
     tJunctionVertices,
-  } = problemGeometry;
+  } = problemGeometry
 
   // Check if arrays have any data
-  const hasBoundaryEdges = boundaryEdges.length > 0;
-  const hasNonManifoldEdges = nonManifoldEdges.length > 0;
-  const hasNonManifoldVertices = nonManifoldVertices.length > 0;
-  const hasSelfIntersections = selfIntersectionCentroids.length > 0;
-  const hasTJunctions = tJunctionVertices.length > 0;
+  const hasBoundaryEdges = boundaryEdges.length > 0
+  const hasNonManifoldEdges = nonManifoldEdges.length > 0
+  const hasNonManifoldVertices = nonManifoldVertices.length > 0
+  const hasSelfIntersections = selfIntersectionCentroids.length > 0
+  const hasTJunctions = tJunctionVertices.length > 0
 
   return (
     <group name="problem-overlays">
@@ -78,7 +81,7 @@ export function ProblemOverlays({ problemGeometry, visibility }: ProblemOverlays
         />
       )}
     </group>
-  );
+  )
 }
 
 // ============================================================================
@@ -86,20 +89,24 @@ export function ProblemOverlays({ problemGeometry, visibility }: ProblemOverlays
 // ============================================================================
 
 interface LineSegmentsOverlayProps {
-  positions: Float32Array;
-  color: string;
-  name?: string;
+  positions: Float32Array
+  color: string
+  name?: string
 }
 
 /**
  * Renders line segments from a flat Float32Array of positions.
  * Format: [x1,y1,z1, x2,y2,z2, x3,y3,z3, x4,y4,z4, ...] where each pair of vertices forms a segment.
  */
-function LineSegmentsOverlay({ positions, color, name }: LineSegmentsOverlayProps) {
-  const positionArray = useMemo(() => positions, [positions]);
-  const vertexCount = positions.length / 3;
+function LineSegmentsOverlay({
+  positions,
+  color,
+  name,
+}: LineSegmentsOverlayProps) {
+  const positionArray = useMemo(() => positions, [positions])
+  const vertexCount = positions.length / 3
 
-  if (vertexCount < 2) return null;
+  if (vertexCount < 2) return null
 
   return (
     <lineSegments name={name} renderOrder={1}>
@@ -117,14 +124,14 @@ function LineSegmentsOverlay({ positions, color, name }: LineSegmentsOverlayProp
         opacity={0.9}
       />
     </lineSegments>
-  );
+  )
 }
 
 interface PointsOverlayProps {
-  positions: Float32Array;
-  color: string;
-  size: number;
-  name?: string;
+  positions: Float32Array
+  color: string
+  size: number
+  name?: string
 }
 
 /**
@@ -132,10 +139,10 @@ interface PointsOverlayProps {
  * Format: [x,y,z, x,y,z, ...] where each triplet is a point.
  */
 function PointsOverlay({ positions, color, size, name }: PointsOverlayProps) {
-  const positionArray = useMemo(() => positions, [positions]);
-  const vertexCount = positions.length / 3;
+  const positionArray = useMemo(() => positions, [positions])
+  const vertexCount = positions.length / 3
 
-  if (vertexCount < 1) return null;
+  if (vertexCount < 1) return null
 
   return (
     <points name={name} renderOrder={2}>
@@ -154,5 +161,5 @@ function PointsOverlay({ positions, color, size, name }: PointsOverlayProps) {
         opacity={0.95}
       />
     </points>
-  );
+  )
 }

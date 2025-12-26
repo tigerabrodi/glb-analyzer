@@ -1,0 +1,1 @@
+export { useGlbAnalyzer } from './useGlbAnalyzer';

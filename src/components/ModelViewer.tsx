@@ -84,7 +84,7 @@ export function ModelViewer({
         {glbUrl && (
           <Suspense fallback={<LoadingIndicator />}>
             <Center>
-              <GLBModel url={glbUrl} />
+              <GLBModel url={glbUrl} wireframe={overlayVisibility.wireframe} />
             </Center>
           </Suspense>
         )}
